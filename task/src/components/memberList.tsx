@@ -30,7 +30,6 @@ interface User {
     preferences: string | null;
     region?: string;
     country?: string;
-    engagementType?: string;
 }
 
 interface MemberProps {
@@ -52,22 +51,18 @@ const Member = ({ initialData }: MemberProps) => {
 
     const { users, loading } = usePagination(initialData, filters);
 
-
     return (
-        <>
-            <div className="member__card-wrapper">
-                <div className="member__card">
-                    {users.map((item) => (
-                        <Card key={item.uid}  member={item} />
-                    ))}
-                    <div id="scroll-trigger" className="infinite__scroll-trigger"></div>
-                </div>
-                <div className="loader">
-                    {loading && <div>Loading...</div>}
-                </div>
-
+        <div className="member__card-wrapper">
+            <div className="member__card">
+                {users.map((item) => (
+                    <Card key={item.uid} member={item} />
+                ))}
+                <div id="scroll-trigger" className="infinite__scroll-trigger"></div>
             </div>
-        </>
+            <div className="loader">
+                {loading && <div>Loading...</div>}
+            </div>
+        </div>
     );
 };
 

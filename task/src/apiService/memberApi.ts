@@ -1,5 +1,4 @@
-const regions = ["Africa", "Asia", "Europe", "NorthAmerica", "NotDefined", "Oceania", "SouthAmerica"]
-const countries = ["Argentina", "Armenia", "Australia", "Belarus", "Belgium", "Brazil", "Cambodia", "Cameroon", "Canada", "Chile"]
+import { API_BASE_URL, COUNTRIES, DEFAULT_LIMIT, REGIONS } from "@/app/constants/constants";
 
 export const fetchData = async (pageNumber: number,
     filters: {
@@ -11,14 +10,14 @@ export const fetchData = async (pageNumber: number,
         newMember?: boolean;
     }) => {
     try {
-        const res = await fetch(`https://stag-protocol-labs-network-api.herokuapp.com/v1/members?pagination=true&page=${pageNumber}&limit=60`)
+        const res = await fetch(`${API_BASE_URL}?pagination=true&page=${pageNumber}&limit=${DEFAULT_LIMIT}`)
         if (!res.ok) {
             console.error(`Error: ${res.status} ${res.statusText}`)
         }
         const jsonData = await res.json()
         for (let i = 0; i < jsonData.length; i++) {
-            jsonData[i].region = regions[i % regions.length]
-            jsonData[i].country = countries[i % countries.length]
+            jsonData[i].region = REGIONS[i % REGIONS.length]
+            jsonData[i].country = COUNTRIES[i % COUNTRIES.length]
         }
 
         const filteredData = jsonData.filter((user: any) => {

@@ -1,28 +1,13 @@
 'use client'
+import { COUNTRIES, REGIONS } from "@/app/constants/constants";
 import "../styles/filter.css";
 import { useRouter, useSearchParams } from "next/navigation"
-
-const regions = ["Africa", "Asia", "Europe", "NorthAmerica", "NotDefined", "Oceania", "SouthAmerica"]
-const countries = ["Argentina", "Armenia", "Australia", "Belarus", "Belgium", "Brazil", "Cambodia", "Cameroon", "Canada", "Chile"]
 
 const FilterPanel = () => {
 
     const router = useRouter()
     const searchParams = useSearchParams()
     
-
-    const handleFilterChange = (key: string, value: string) => {
-        const params = new URLSearchParams(searchParams.toString())
-
-        if (params.get(key) === value) {
-            params.delete(key)
-        } else {
-            params.set(key, value);
-        }
-
-        router.push(`/members?${params.toString()}`)
-    }
-
     const handleRegion = (region: string) => {
         const params = new URLSearchParams(searchParams.toString()) 
 
@@ -112,7 +97,7 @@ const FilterPanel = () => {
                 <span className="filter__span"></span>
                 <h2>Region</h2>
                 <div className="filter__region">
-                    {regions.map((region) =>{
+                    {REGIONS.map((region) =>{
                         const isActive = searchParams.get('region') === region
                         return (
                         <button key={region} onClick={()=>handleRegion(region)} className={`Filter__button ${isActive ? 'active' : ''}`}>{region}</button>
@@ -125,7 +110,7 @@ const FilterPanel = () => {
                 <span className="filter__span"></span>
                 <h2>Country</h2>
                 <div className="filter__region">
-                    {countries.map((country) => {
+                    {COUNTRIES.map((country) => {
                         const isActive = searchParams.get('country') === country       
                         return(
                         <button key={country} onClick={()=>handleCountry(country)} className={`Filter__button ${isActive ? 'active' : ''}`}>{country}</button>

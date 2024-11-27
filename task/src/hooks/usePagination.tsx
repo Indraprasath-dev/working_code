@@ -1,3 +1,4 @@
+'use client'
 import { fetchData } from "@/apiService/memberApi";
 import { useState, useRef, useEffect } from "react";
 
@@ -27,7 +28,6 @@ interface User {
     preferences: string | null;
     region?: string;
     country?: string;
-    engagementType?: string;
 }
 
 interface Filters {
@@ -39,12 +39,14 @@ interface Filters {
     newMember?: boolean;
 }
 
+
 const usePagination = (initialData: User[], filters: Filters) => {
     const [users, setUsers] = useState<User[]>(initialData);
     const [loading, setLoading] = useState<boolean>(false);
-    const [page, setPage] = useState<number>(1);
+    const [page, setPage] = useState<number>(2);
     const [hasMore, setHasMore] = useState<boolean>(true);
 
+    //To-Do Handle Error
     const observer = useRef<IntersectionObserver | null>(null);
 
     const fetchUsers = async (page: number) => {
@@ -109,8 +111,7 @@ const usePagination = (initialData: User[], filters: Filters) => {
         }
     }, [page]);
 
-    return { users, loading, hasMore };
-
+    return { users, loading };
 }   
 
 export default usePagination

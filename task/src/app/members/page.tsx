@@ -1,6 +1,6 @@
 import { fetchData } from "@/apiService/memberApi";
 import FilterPanel from "@/components/filterPanel";
-import Pagination from "@/components/memberList";
+import MemberList from "@/components/memberList";
 
 interface MemberProps {
     searchParams: { [key: string]: string | undefined };
@@ -62,7 +62,7 @@ const Page = async ({ searchParams }: MemberProps) => {
                         </div>
                     </div>
                 </div>
-                <Pagination initialData={initialData} />
+                <MemberList initialData={initialData} />
             </div>
         </div>
     )
