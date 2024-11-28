@@ -1,5 +1,5 @@
 'use client'
-import { COUNTRIES, REGIONS } from "@/app/constants/constants";
+import { COUNTRIES, REGIONS } from "@/constants/constants";
 import "../styles/filter.css";
 import { useRouter, useSearchParams } from "next/navigation"
 

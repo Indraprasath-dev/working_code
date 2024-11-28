@@ -41,15 +41,15 @@ const Member = ({ initialData }: MemberProps) => {
     const searchParams = useSearchParams();
 
     const filters = {
-        region: searchParams.get("region") || undefined,
-        country: searchParams.get("country") || undefined,
+        region: searchParams.get("region"),
+        country: searchParams.get("country"),
         officeHours: searchParams.get("OfficeHours") === "true",
         openToCollaborate: searchParams.get("OpenToCollaborate") === "true",
         friends: searchParams.get("Friends") === "true",
         newMember: searchParams.get("NewMember") === "true",
     };
 
-    const { users, loading } = usePagination(initialData, filters);
+    const {users, loading} = usePagination(initialData, filters);
 
     return (
         <div className="member__card-wrapper">

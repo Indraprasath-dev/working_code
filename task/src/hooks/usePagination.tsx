@@ -31,55 +31,57 @@ interface User {
 }
 
 interface Filters {
-    region?: string;
-    country?: string;
+    region?: string | null;
+    country?: string | null;
     officeHours?: boolean;
     openToCollaborate?: boolean;
     friends?: boolean;
     newMember?: boolean;
 }
 
-
 const usePagination = (initialData: User[], filters: Filters) => {
-    const [users, setUsers] = useState<User[]>(initialData);
-    const [loading, setLoading] = useState<boolean>(false);
-    const [page, setPage] = useState<number>(2);
-    const [hasMore, setHasMore] = useState<boolean>(true);
+    const [state, setState] = useState({
+        users: initialData,
+        loading: false,
+        page: 2,
+        hasMore: true
+    });
 
-    //To-Do Handle Error
     const observer = useRef<IntersectionObserver | null>(null);
 
     const fetchUsers = async (page: number) => {
         try {
-            setLoading(true);
+            setState((prevState) => ({ ...prevState, loading: true }));
             const data = await fetchData(page, filters);
-            setLoading(false);
+            setState((prevState) => ({ ...prevState, loading: false }));
             return data;
         } catch (error) {
             console.error("Error fetching data:", error);
-            setLoading(false);
+            setState((prevState) => ({ ...prevState, loading: false }));
             return [];
         }
     };
 
     useEffect(() => {
         const loadFilteredUsers = async () => {
-            setLoading(true);
-            const data = await fetchUsers(1); 
-            setUsers(data);
-            setPage(2); 
-            setHasMore(data.length > 0);
-            setLoading(false);
+            setState((prevState) => ({ ...prevState, loading: true }));
+            const data = await fetchUsers(1);
+            setState({
+                users: data,
+                loading: false,
+                page: 2,
+                hasMore: data.length > 0,
+            });
         };
 
-        loadFilteredUsers(); 
+        loadFilteredUsers();
     }, [JSON.stringify(filters)]);
 
     useEffect(() => {
         const observerCallback = (entries: IntersectionObserverEntry[]) => {
             const target = entries[0];
-            if (target.isIntersecting && !loading && hasMore) {
-                setPage((prevPage) => prevPage + 1);
+            if (target.isIntersecting && !state.loading && state.hasMore) {
+                setState((prevState) => ({ ...prevState, page: prevState.page + 1 }));
             }
         };
 
@@ -97,21 +99,49 @@ const usePagination = (initialData: User[], filters: Filters) => {
                 observer.current.unobserve(loadTrigger);
             }
         };
-    }, [loading, hasMore]);
+    }, [state.loading, state.hasMore]);
+
 
     useEffect(() => {
-        if (page > 1) {
+        if (state.page > 1) {
             const loadMoreUsers = async () => {
-                const newUsers = await fetchUsers(page);
-                setUsers((prevUsers) => [...prevUsers, ...newUsers]);
-                setHasMore(newUsers.length > 0);
+                const newUsers = await fetchUsers(state.page);
+                setState((prevState) => ({
+                    ...prevState,
+                    users: [...prevState.users, ...newUsers],
+                    hasMore: newUsers.length > 0,
+                }));
             };
 
             loadMoreUsers();
         }
-    }, [page]);
+    }, [state.page]);
 
-    return { users, loading };
-}   
+    return { users: state.users, loading: state.loading };
+}
 
 export default usePagination
+
+
+
+// useEffect(() => {
+//     const loadData = async () => {
+//         if (state.page === 1) {
+//             const data = await fetchUsers(1);
+//             setState({
+//                 users: data,
+//                 loading: false,
+//                 page: 2,
+//                 hasMore: data.length > 0,
+//             });
+//         } else {
+//             const newUsers = await fetchUsers(state.page);
+//             setState((prevState) => ({
+//                 ...prevState,
+//                 users: [...prevState.users, ...newUsers],
+//             }));
+//         }
+//     };
+
+//     loadData();
+// }, [filters.region, filters.country, filters.officeHours, filters.openToCollaborate, state.page]);

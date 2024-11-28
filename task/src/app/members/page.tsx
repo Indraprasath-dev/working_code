@@ -3,7 +3,7 @@ import FilterPanel from "@/components/filterPanel";
 import MemberList from "@/components/memberList";
 
 interface MemberProps {
-    searchParams: { [key: string]: string | undefined };
+    searchParams: {[key: string]: string | undefined};
 }
 
 const Page = async ({ searchParams }: MemberProps) => {

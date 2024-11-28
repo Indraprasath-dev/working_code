@@ -11,7 +11,7 @@ const Header = () => {
                 <div className="header__menu">
                     <ul>
                         <li>
-                            <a >
+                            <a>
                                 <img src="/team.svg"></img>
                                 Teams
                             </a>

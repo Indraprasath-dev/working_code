@@ -1,9 +1,9 @@
-import { API_BASE_URL, COUNTRIES, DEFAULT_LIMIT, REGIONS } from "@/app/constants/constants";
+import { API_BASE_URL, DEFAULT_LIMIT, REGIONS, COUNTRIES } from "@/constants/constants";
 
 export const fetchData = async (pageNumber: number,
     filters: {
-        region?: string;
-        country?: string;
+        region?: string | null;
+        country?: string | null;
         officeHours?: boolean;
         openToCollaborate?: boolean;
         friends?: boolean;
@@ -38,7 +38,7 @@ export const fetchData = async (pageNumber: number,
         });
         return filteredData;
     } catch (error) {
-        console.error('Error fetching members:', error)
-        return []
+        console.error('Error fetching members:', error);
+        return [];
     }
 }
