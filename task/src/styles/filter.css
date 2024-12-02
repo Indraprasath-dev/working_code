@@ -130,3 +130,8 @@ h2 {
 .Filter__button.active {
     color: #007bff; 
 }
+
+.Filter__button.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;  
+}

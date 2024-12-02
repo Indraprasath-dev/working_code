@@ -9,3 +9,14 @@ export const API_BASE_URL = "https://stag-protocol-labs-network-api.herokuapp.co
 
 // Default limit for pagination in API request
 export const DEFAULT_LIMIT = 60;
+
+export const REGION_COUNTRY_MAP = {
+    Africa: ["Cameroon"],
+    Asia: ["Armenia", "Cambodia"],
+    Europe: ["Belarus", "Belgium"],
+    NorthAmerica: ["Canada"],
+    NotDefined: [],
+    Oceania: ["Australia"],
+    SouthAmerica: ["Argentina", "Brazil", "Chile"],
+};
+  

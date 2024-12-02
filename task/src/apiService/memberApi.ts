@@ -1,4 +1,18 @@
-import { API_BASE_URL, DEFAULT_LIMIT, REGIONS, COUNTRIES } from "@/constants/constants";
+import { API_BASE_URL, DEFAULT_LIMIT, REGIONS } from "@/constants/constants";
+
+
+// Define a union type for region keys
+type Region = typeof REGIONS[number];
+
+export const REGION_COUNTRY_MAP: Record<Region, string[]> = {
+    Africa: ["Cameroon"],
+    Asia: ["Armenia", "Cambodia"],
+    Europe: ["Belarus", "Belgium"],
+    NorthAmerica: ["Canada"],
+    NotDefined: [],
+    Oceania: ["Australia"],
+    SouthAmerica: ["Argentina", "Brazil", "Chile"],
+};
 
 export const fetchData = async (pageNumber: number,
     filters: {
@@ -15,11 +29,27 @@ export const fetchData = async (pageNumber: number,
             console.error(`Error: ${res.status} ${res.statusText}`)
         }
         const jsonData = await res.json()
-        for (let i = 0; i < jsonData.length; i++) {
-            jsonData[i].region = REGIONS[i % REGIONS.length]
-            jsonData[i].country = COUNTRIES[i % COUNTRIES.length]
-        }
+        // for (let i = 0; i < jsonData.length; i++) {
+        //     jsonData[i].region = REGIONS[i % REGIONS.length]
+        //     jsonData[i].country = COUNTRIES[i % COUNTRIES.length]
+        // }
 
+        for (let i = 0; i < jsonData.length; i++) {
+            // Pick a random region
+            const randomRegion = REGIONS[Math.floor(Math.random() * REGIONS.length)];
+            jsonData[i].region = randomRegion;
+        
+            // Pick a random country from the region's mapped countries
+            const countriesForRegion = REGION_COUNTRY_MAP[randomRegion];
+            if (countriesForRegion && countriesForRegion.length > 0) {
+                const randomCountry = countriesForRegion[Math.floor(Math.random() * countriesForRegion.length)];
+                jsonData[i].country = randomCountry;
+            } else {
+                jsonData[i].country = "null"; 
+            }
+        }
+        
+        
         const filteredData = jsonData.filter((user: any) => {
             const matchesRegion = filters.region ? user.region === filters.region : true;
             const matchesCountry = filters.country ? user.country === filters.country : true;

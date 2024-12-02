@@ -1,8 +1,9 @@
 "use client";
 import "../styles/member.css";
-import { useSearchParams } from "next/navigation";
+import "../styles/loader.css"
 import usePagination from "@/hooks/usePagination";
 import Card from "./memberCard";
+import Loader from "./loader";
 
 interface User {
     uid: string;
@@ -36,32 +37,32 @@ interface MemberProps {
     initialData: User[];
 }
 
-const Member = ({ initialData }: MemberProps) => {
+const Member = ({initialData}: MemberProps) => {
 
-    const searchParams = useSearchParams();
 
-    const filters = {
-        region: searchParams.get("region"),
-        country: searchParams.get("country"),
-        officeHours: searchParams.get("OfficeHours") === "true",
-        openToCollaborate: searchParams.get("OpenToCollaborate") === "true",
-        friends: searchParams.get("Friends") === "true",
-        newMember: searchParams.get("NewMember") === "true",
-    };
-
-    const {users, loading} = usePagination(initialData, filters);
+    const {users, loading} = usePagination(initialData);
+    
+    // useEffect(() => {
+    //     if (scrollContainerRef.current) {
+    //         scrollContainerRef.current.scrollTo({ top: 0, behavior: "smooth" });
+    //     } else {
+    //         window.scrollTo({ top: 0, behavior: "smooth" });
+    //     }
+    // }, [JSON.stringify(filters)]);
 
     return (
-        <div className="member__card-wrapper">
+        <div  className="member__card-wrapper">
+        {/* </div><div key={JSON.stringify(filters)}  className="member__card-wrapper"> */}
+            <div className="">
+                {loading && <Loader />}
+            </div>
             <div className="member__card">
-                {users.map((item) => (
-                    <Card key={item.uid} member={item} />
+                {users.map((item, index) => (
+                    <Card key={`${item.uid}-${index}`} member={item} />
                 ))}
                 <div id="scroll-trigger" className="infinite__scroll-trigger"></div>
             </div>
-            <div className="loader">
-                {loading && <div>Loading...</div>}
-            </div>
+            
         </div>
     );
 };
